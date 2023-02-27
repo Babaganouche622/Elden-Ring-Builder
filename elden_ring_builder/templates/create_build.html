@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<form method="POST" action="{{ url_for('main.create_build') }}">
+    {{ form.csrf_token }}
+    <fieldset>
+        <legend>Enter a build</legend>
+
+        {{ form.name.label }}
+        {{ form.name }}
+        <ul>
+            {% for error in form.name.errors %}
+            <li class="error">{{ error }}</li>
+            {% endfor %}
+        </ul>
+
+        {{ form.description.label }}
+        {{ form.description }}
+        <ul>
+            {% for error in form.description.errors %}
+            <li class="error">{{ error }}</li>
+            {% endfor %}
+        </ul>
+
+            {{ form.submit }}
+    </fieldset>
+</form>
+
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<p>
+Welcome to {{ user }}'s profile.
+</p>
+
+<p>
+    {{ user }}'s builds are:
+
+    <ul>
+        {% for build in user.builds %}
+        <li><a href="/build_detail/{{ build.id }}">{{ build.name }}</a></li>
+        {% endfor %}
+    </ul>
+</p>
+
+{% endblock %}

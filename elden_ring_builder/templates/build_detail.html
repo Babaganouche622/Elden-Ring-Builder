@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<p>
+This is the {{ build.name }} build.
+</p>
+
+<p>
+    {{ build.description }}
+</p>
+
+<p>
+  The weapons are:
+</p>
+
+{% if current_user.is_authenticated %}
+<!-- Delete the build -->
+<a href="/delete_build/{{ build.id }}">Delete Build</a>
+  <form method="POST" action="{{ url_for('main.build_detail', build_id=build.id) }}">
+    {{ form.csrf_token }}
+    <fieldset>
+        <legend>Edit this build</legend>
+
+        {{ form.name.label }}
+        {{ form.name }}
+
+        {{ form.description.label }}
+        {{ form.description }}
+
+        {{ form.submit }}
+    </fieldset>
+  </form>
+{% endif %}
+{% endblock %}
+  
