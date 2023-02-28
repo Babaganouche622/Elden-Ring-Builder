@@ -4,6 +4,7 @@
 <h2>Builds</h2>
 
 <ul>
+  <!-- Make a list of builds -->
     {% for build in all_builds %}
     <li>
         <a href="/build_detail/{{ build.id }}">{{ build.name }}</a>
@@ -13,10 +14,17 @@
 
 <h2>Users</h2>
 <ul>
-  <!-- make a list of users -->
+  <!-- Make a list of users -->
   {% for user in all_users %}
   <li><a href="/profile/{{ user.username }}">{{ user.username }}</a></li>
   {% endfor %}
 </ul>
+
+<h2>Weapons</h2>
+<ul>
+  <!-- Make a list of weapons -->
+  {% for weapon in all_weapons %}
+  <li><a href="/weapon_detail/{{ weapon.id }}">{{ weapon.name }}</a></li>
+  {% endfor %}
 
 {% endblock %}

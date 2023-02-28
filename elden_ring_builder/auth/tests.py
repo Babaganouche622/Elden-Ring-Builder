@@ -3,12 +3,13 @@ from unittest import TestCase
 import unittest
 from datetime import date
 from wtforms.validators import DataRequired, Length, ValidationError
+import app
 from elden_ring_builder.extensions import app, db, bcrypt
-from elden_ring_builder.models import Book, Author, User, Audience
+from elden_ring_builder.models import User
 
 """
 Run these tests with the command:
-python -m unittest books_app.main.tests
+python3 -m unittest elden_ring_builder.auth.tests
 """
 
 #################################################

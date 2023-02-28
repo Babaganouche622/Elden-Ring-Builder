@@ -12,6 +12,8 @@
                 <a href="/">Home</a>
                 <div>
                     {% if current_user.is_authenticated %}
+                    <a href="/profile/{{ current_user.username }}">Profile</a>
+                    <a href="/create_weapon">Create Weapon</a>
                     <a href="/create_build">Create Build</a>
                     <a href="/logout">Log Out</a>
                     {% else %}

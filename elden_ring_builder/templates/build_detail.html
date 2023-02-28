@@ -12,11 +12,34 @@ This is the {{ build.name }} build.
 
 <p>
   The weapons are:
+  <ul>
+    {% for weapon in build.weapon %}
+    <li><a href="/weapon_detail/{{ weapon.id }}">{{ weapon.name }}</a></li>
+    {% endfor %}
 </p>
 
 {% if current_user.is_authenticated %}
+
+<!-- Add Weapon -->
+<h2>Add Weapon:</h2>
+{% for weapon in all_weapons %}
+  <p>{{ weapon.name }}</p>
+  <img src={{ weapon.image }} alt='weapon image'/>
+  <form method="POST" action="/add_weapon/{{ build.id }}/{{ weapon.id }}">
+    <input type="submit" value="Add to Build">
+  </form>
+  {% if weapon in build.weapon %}
+  <form method="POST" action="/remove_weapon/{{ build.id }}/{{ weapon.id }}">
+    <input type="submit" value="Remove from Build">
+    </form>
+  {% endif %}
+{% endfor %}
+</br>
 <!-- Delete the build -->
+<h2>Delete Build</h2>
 <a href="/delete_build/{{ build.id }}">Delete Build</a>
+
+
   <form method="POST" action="{{ url_for('main.build_detail', build_id=build.id) }}">
     {{ form.csrf_token }}
     <fieldset>
@@ -33,4 +56,3 @@ This is the {{ build.name }} build.
   </form>
 {% endif %}
 {% endblock %}
-  
