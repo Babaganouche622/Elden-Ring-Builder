@@ -17,11 +17,8 @@ main = Blueprint("main", __name__)
 @main.route('/')
 def home():
     all_builds = Build.query.all()
-    print(all_builds)
     all_users = User.query.all()
-    print(all_users)
     all_weapons = Weapon.query.all()
-    print(all_weapons)
     return render_template('home.html', 
     all_users=all_users, 
     all_builds=all_builds, 
@@ -72,6 +69,10 @@ def delete_build(build_id):
 # route for profile
 @main.route('/profile/<username>')
 def profile(username):
+    if current_user.is_anonymous:
+        return redirect(url_for('main.home'))
+    if current_user.username != username:
+        return redirect(url_for('main.home'))
     user = User.query.filter_by(username=username).one()
     return render_template('profile.html', user=user)
 
@@ -136,4 +137,3 @@ def remove_weapon(build_id, weapon_id):
     db.session.add(build)
     db.session.commit()
     return redirect(url_for('main.build_detail', build_id=build.id))
-    

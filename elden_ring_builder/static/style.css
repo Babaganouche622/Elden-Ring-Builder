@@ -50,3 +50,16 @@ input[type=submit] {
 li.error {
   color: red;
 }
+
+#weapon-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 10px;
+}
+
+#weapon-card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid black;
+  padding: 10px;
+}

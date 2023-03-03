@@ -3,56 +3,60 @@
 {% block content %}
 
 <p>
-This is the {{ build.name }} build.
+  This is the {{ build.name }} build.
 </p>
 
 <p>
-    {{ build.description }}
+  {{ build.description }}
 </p>
 
 <p>
   The weapons are:
-  <ul>
-    {% for weapon in build.weapon %}
-    <li><a href="/weapon_detail/{{ weapon.id }}">{{ weapon.name }}</a></li>
+<ul>
+  {% for weapon in build.weapon %}
+  <li><a href="/weapon_detail/{{ weapon.id }}">{{ weapon.name }}</a></li>
+  {% endfor %}
+  </p>
+
+  {% if current_user.is_authenticated %}
+
+  <!-- Add Weapon -->
+  <h2>Add Weapon:</h2>
+  <div id="weapon-container">
+    {% for weapon in all_weapons %}
+    <div id="weapon-card">
+      <p>{{ weapon.name }}</p>
+      <img src={{ weapon.image }} alt='weapon image' />
+      <form method="POST" action="/add_weapon/{{ build.id }}/{{ weapon.id }}">
+        <input type="submit" value="Add to Build">
+      </form>
+      {% if weapon in build.weapon %}
+      <form method="POST" action="/remove_weapon/{{ build.id }}/{{ weapon.id }}">
+        <input type="submit" value="Remove from Build">
+      </form>
+      {% endif %}
+    </div>
     {% endfor %}
-</p>
-
-{% if current_user.is_authenticated %}
-
-<!-- Add Weapon -->
-<h2>Add Weapon:</h2>
-{% for weapon in all_weapons %}
-  <p>{{ weapon.name }}</p>
-  <img src={{ weapon.image }} alt='weapon image'/>
-  <form method="POST" action="/add_weapon/{{ build.id }}/{{ weapon.id }}">
-    <input type="submit" value="Add to Build">
-  </form>
-  {% if weapon in build.weapon %}
-  <form method="POST" action="/remove_weapon/{{ build.id }}/{{ weapon.id }}">
-    <input type="submit" value="Remove from Build">
-    </form>
-  {% endif %}
-{% endfor %}
-</br>
-<!-- Delete the build -->
-<h2>Delete Build</h2>
-<a href="/delete_build/{{ build.id }}">Delete Build</a>
+  </div>
+  </br>
+  <!-- Delete the build -->
+  <h2>Delete Build</h2>
+  <a href="/delete_build/{{ build.id }}">Delete Build</a>
 
 
   <form method="POST" action="{{ url_for('main.build_detail', build_id=build.id) }}">
     {{ form.csrf_token }}
     <fieldset>
-        <legend>Edit this build</legend>
+      <legend>Edit this build</legend>
 
-        {{ form.name.label }}
-        {{ form.name }}
+      {{ form.name.label }}
+      {{ form.name }}
 
-        {{ form.description.label }}
-        {{ form.description }}
+      {{ form.description.label }}
+      {{ form.description }}
 
-        {{ form.submit }}
+      {{ form.submit }}
     </fieldset>
   </form>
-{% endif %}
-{% endblock %}
+  {% endif %}
+  {% endblock %}
