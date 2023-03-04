@@ -59,7 +59,8 @@ def build_detail(build_id):
     return render_template('build_detail.html', build=build, form=form, all_weapons=all_weapons)
 
 # route for delete_build
-@main.route('/delete_build/<int:build_id>')
+@main.route('/delete_build/<int:build_id>', methods=['POST'])
+@login_required
 def delete_build(build_id):
     build = Build.query.filter_by(id=build_id).one()
     db.session.delete(build)
@@ -78,6 +79,7 @@ def profile(username):
 
 # route for creating weapon
 @main.route('/create_weapon', methods=['GET', 'POST'])
+@login_required
 def create_weapon():
     form = CreateWeaponForm()
 
@@ -93,7 +95,8 @@ def create_weapon():
     return render_template('create_weapon.html', form=form)
 
 # route for delete_weapon
-@main.route('/delete_weapon/<int:weapon_id>')
+@main.route('/delete_weapon/<int:weapon_id>', methods=['POST'])
+@login_required
 def delete_weapon(weapon_id):
     weapon = Weapon.query.filter_by(id=weapon_id).one()
     db.session.delete(weapon)

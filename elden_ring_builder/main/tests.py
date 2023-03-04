@@ -5,6 +5,7 @@ import app
 from datetime import date
 from elden_ring_builder.extensions import app, db, bcrypt
 from elden_ring_builder.models import Build, Weapon, User
+from flask_login import login_user, logout_user, login_required, current_user
 """
 Run these tests with the command:
 python3 -m unittest elden_ring_builder.main.tests
@@ -88,7 +89,16 @@ class MainTests(unittest.TestCase):
   def test_create_weapon(self):
     """Test that the create weapon page works when logged in."""
     create_user()
-    login(self.app, 'Dinkleberry', 'Dinkleberry')
+
+    post_data = {
+      'username': 'Dinkleberry',
+      'password': 'Goochie'
+    }
+
+    self.app.post('/login', data=post_data)
+    response = self.app.get('/')
+    response_text = response.get_data(as_text=True)
+    self.assertIn('You are logged in as Dinkleberry', response_text)
 
     # enter the create weapon page and enter form data to make a new weapon
     response = self.app.post('/create_weapon', data=dict(
@@ -100,17 +110,70 @@ class MainTests(unittest.TestCase):
     self.assertIn('Test Weapon', response_text)
     self.assertIsNotNone(Weapon.query.filter_by(name='Test Weapon').first())
 
+  def test_delete_weapon(self):
+    """Test should delete a weapon."""
+    create_user()
+
+    post_data = {
+      'username': 'Dinkleberry',
+      'password': 'Goochie'
+    }
+
+    self.app.post('/login', data=post_data)
+    response = self.app.get('/')
+    response_text = response.get_data(as_text=True)
+    self.assertIn('You are logged in as Dinkleberry', response_text)
+
+    create_weapon()
+
+    self.assertIsNotNone(Weapon.query.filter_by(id=1).first())
+    response = self.app.post("/delete_weapon/1", follow_redirects=True)
+
+    self.assertEqual(response.status_code, 200)
+    self.assertIsNone(Weapon.query.filter_by(id=1).first())
+
   def test_create_build(self):
     """Test that the user can create a new build after they are logged in."""
     create_user()
-    login(self.app, 'Dinkleberry', 'Goochie')
-    
-    
-    self.assertIn
+
+    post_data = {
+      'username': 'Dinkleberry',
+      'password': 'Goochie'
+    }
+
+    self.app.post('/login', data=post_data)
+    response = self.app.get('/')
+    response_text = response.get_data(as_text=True)
+    self.assertIn('You are logged in as Dinkleberry', response_text)
+
     response = self.app.post('/create_build', data=dict(
       name='Test Build',
       description='This is a test build'
     ), follow_redirects=True)
     response_text = response.get_data(as_text=True)
 
+    self.assertEqual(response.status_code, 200)
+    self.assertIn('Test Build', response_text)  
+    self.assertIsNotNone(Build.query.filter_by(name='Test Build').first())
 
+  def test_delete_build(self):
+    """Test successful deletion of a build."""
+    create_user()
+
+    post_data = {
+      'username': 'Dinkleberry',
+      'password': 'Goochie'
+    }
+
+    self.app.post('/login', data=post_data)
+    response = self.app.get('/')
+    response_text = response.get_data(as_text=True)
+    self.assertIn('You are logged in as Dinkleberry', response_text)
+
+    create_build()
+
+    self.assertIsNotNone(Build.query.filter_by(id=1).first())
+    response = self.app.post("/delete_build/1", follow_redirects=True)
+
+    self.assertEqual(response.status_code, 200)
+    self.assertIsNone(Weapon.query.filter_by(id=1).first())
